@@ -1,7 +1,7 @@
 require 'librarian/chef/integration/knife'
 
-chef_server_url          'http://chef.server.com:4000' # chef server url
-node_name                'client'                      # your client name
+chef_server_url          'http://192.168.1.65:4000'    # chef server url
+node_name                `whoami`.chomp                # your client name
 client_key               'client.pem'                  # your client key
 
 log_level                :info

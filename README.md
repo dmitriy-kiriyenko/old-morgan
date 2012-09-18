@@ -1,6 +1,4 @@
-# Boilerplate Chef Repository
-
-[![Build Status](https://secure.travis-ci.org/iafonov/stacker.png?branch=master)](http://travis-ci.org/iafonov/stacker)
+# Chef Repository for Turbine Application
 
 Boilerplate chef repository. It comes with bundled set of frequently used tools, skeleton roles and widely used cookbooks.
 
@@ -221,9 +219,3 @@ client_key      'client.pem'                               # your client key
 ** Important: check that server hostname is the same as its domain **
 
 * Navigate to http://li483-124.members.linode.com - you should see copycopter welcome screen.
-
-## Contributors:
-
-* [Dmitriy Kiriyenko](https://github.com/dmitriy-kiriyenko)
-
-© 2012 [Igor Afonov](https://iafonov.github.com) MIT License

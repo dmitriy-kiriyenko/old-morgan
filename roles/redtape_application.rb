@@ -1,5 +1,5 @@
-name 'copycopter'
-description 'Sample role. Manages rails application deployment. See cookbooks/copycopter.'
+name 'redtape_application'
+description 'Manages deployment of Redtape Ruby on Rails application'
 
 default_attributes copycopter: {
                      environment: 'production',
@@ -7,8 +7,8 @@ default_attributes copycopter: {
 
 run_list 'role[base]',
          'role[chef-server]',
-         'role[postgresql-server]',
+         'role[mysql-server]',
          'role[nginx]',
          'role[postfix]',
          'role[nodejs]',
-         'recipe[copycopter]'
+         'recipe[redtape_application]'

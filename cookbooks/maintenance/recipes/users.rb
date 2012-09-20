@@ -8,6 +8,7 @@ user username do
   comment 'Deployment User'
   home "/home/#{username}"
   gid group
+  shell '/bin/bash'
   supports :manage_home => true
 end
 

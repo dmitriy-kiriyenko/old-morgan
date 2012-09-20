@@ -20,6 +20,7 @@ if admin_users.any?
       comment "Admin #{username}"
       home "/home/#{username}"
       gid 'server_admin'
+      shell '/bin/bash'
       supports :manage_home => true
     end
 

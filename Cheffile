@@ -7,8 +7,8 @@ cookbook 'git'
 cookbook 'firewall', :git => 'https://github.com/opscode-cookbooks/firewall.git'
 cookbook 'ufw'
 
-# postgresql
-cookbook 'postgresql'
+# mysql
+cookbook 'mysql'
 
 # nginx
 cookbook 'nginx'

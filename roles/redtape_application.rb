@@ -6,6 +6,7 @@ default_attributes copycopter: {
                    }
 
 run_list 'role[base]',
+         'role[ntp]',
          'role[chef-server]',
          'role[mysql-server]',
          'role[nginx]',

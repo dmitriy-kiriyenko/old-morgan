@@ -4,7 +4,7 @@ site 'http://community.opscode.com/api/v1'
 cookbook 'git'
 
 # ufw - it is always a good idea to enable and setup firewall for anything visible for the outside world
-cookbook 'firewall', :git => 'https://github.com/opscode-cookbooks/firewall.git'
+cookbook 'firewall', :git => 'git://github.com/opscode-cookbooks/firewall.git'
 cookbook 'ufw'
 
 # mysql
@@ -16,8 +16,11 @@ cookbook 'nginx'
 # Postfix
 cookbook 'postfix'
 
-# cookbook manages deployment of rails application
-cookbook 'application_ruby', :git => 'https://github.com/opscode-cookbooks/application_ruby'
+# Ntp
+cookbook 'ntp'
 
 # Node.js
-cookbook 'nodejs', :git => 'https://github.com/iafonov/chef-nodejs.git'
+cookbook 'nodejs', :git => 'git://github.com/iafonov/chef-nodejs.git'
+
+# Unicorn
+cookbook 'chef-unicorn', :git => 'git://github.com/tigris/chef-unicorn.git'

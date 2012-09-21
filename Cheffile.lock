@@ -46,10 +46,9 @@ GIT
   ref: master
   sha: ac14124e9a7b7a81648ba3656430c3db9ebf3eef
   specs:
-    chef-unicorn (0.2.0)
+    unicorn (0.2.0)
 
 DEPENDENCIES
-  chef-unicorn (>= 0)
   firewall (>= 0)
   git (>= 0)
   mysql (>= 0)
@@ -58,4 +57,5 @@ DEPENDENCIES
   ntp (>= 0)
   postfix (>= 0)
   ufw (>= 0)
+  unicorn (>= 0)
 

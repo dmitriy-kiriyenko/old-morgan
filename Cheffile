@@ -23,4 +23,4 @@ cookbook 'ntp'
 cookbook 'nodejs', :git => 'git://github.com/iafonov/chef-nodejs.git'
 
 # Unicorn
-cookbook 'chef-unicorn', :git => 'git://github.com/tigris/chef-unicorn.git'
+cookbook 'unicorn', :git => 'git://github.com/tigris/chef-unicorn.git'

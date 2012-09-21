@@ -1,3 +1,3 @@
 node["unicorn"]["installs"] = [{ "app_root" => "/var/www/apps/redtape/current" }]
 
-include_recipe "chef-unicorn"
+include_recipe "unicorn"

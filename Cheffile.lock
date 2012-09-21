@@ -28,6 +28,13 @@ SITE
     yum (0.8.0)
 
 GIT
+  remote: git://github.com/dmitriy-kiriyenko/chef-unicorn.git
+  ref: master
+  sha: ccfcf6b423290636c92f67c27951577b44e12bae
+  specs:
+    unicorn (0.2.0)
+
+GIT
   remote: git://github.com/iafonov/chef-nodejs.git
   ref: master
   sha: 2de69ed8526bcc6d8f60b2ec03a5c2d9ed41b71d
@@ -40,13 +47,6 @@ GIT
   sha: c6274bb2003f7c1f31d4b38e0217b99d5bab05c5
   specs:
     firewall (0.9.0)
-
-GIT
-  remote: git://github.com/tigris/chef-unicorn.git
-  ref: master
-  sha: ac14124e9a7b7a81648ba3656430c3db9ebf3eef
-  specs:
-    unicorn (0.2.0)
 
 DEPENDENCIES
   firewall (>= 0)

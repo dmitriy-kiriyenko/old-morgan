@@ -12,7 +12,5 @@ template '/etc/databases/redtape.yml' do
   group node['redtape_application']['deploy']['group']
   mode '775'
   source 'database.yml.erb'
-  variables(
-    node['redtape_application']['database'].merge password: node['mysql']['application_password']
-  )
+  variables(node['redtape_application']['database'].merge(:password => node['mysql']['application_password']))
 end

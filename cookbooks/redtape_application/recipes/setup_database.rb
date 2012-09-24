@@ -1,5 +1,4 @@
-node.set_unless['mysql']['application_password'] = secure_password
-node['redtape_application']['database']['password'] = node['mysql']['application_password']
+node['redtape_application']['database']['password'] = node['mysql']['server_root_password']
 
 directory '/etc/databases' do
   user node['redtape_application']['deploy']['user']

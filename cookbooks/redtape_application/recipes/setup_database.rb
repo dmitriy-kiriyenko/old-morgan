@@ -17,11 +17,11 @@ template '/etc/databases/redtape.yml' do
 end
 
 execute 'create_database' do
-  command "mysql --user='#{node['redtape_application']['database']['user']}'
+  command "mysql --user='#{node['redtape_application']['database']['username']}'
                  --password='#{node['redtape_application']['database']['password']}'
                  -e \"CREATE DATABASE IF NOT EXISTS #{node['redtape_application']['database']['database']}
                                                     DEFAULT CHARACTER SET utf8
-                                                    COLLATE utf8_general_ci\""
+                                                    COLLATE utf8_general_ci\"".gsub /\s+/, ' '
   user deploy_user
   group deploy_group
 end

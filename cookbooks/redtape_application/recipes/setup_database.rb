@@ -1,4 +1,5 @@
 node.set_unless['mysql']['application_password'] = secure_password
+node['redtape_application']['database']['password'] = node['mysql']['application_password']
 
 directory '/etc/databases' do
   user node['redtape_application']['deploy']['user']
@@ -12,5 +13,5 @@ template '/etc/databases/redtape.yml' do
   group node['redtape_application']['deploy']['group']
   mode '775'
   source 'database.yml.erb'
-  variables(node['redtape_application']['database'].merge(:password => node['mysql']['application_password']))
+  variables(node['redtape_application']['database'])
 end

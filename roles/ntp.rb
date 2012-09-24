@@ -1,4 +1,4 @@
-name 'ntp'
-description 'Sets up ntp'
+name 'git'
+description 'Sets up git'
 
-run_list 'recipe[ntp]'
+run_list 'recipe[git]'

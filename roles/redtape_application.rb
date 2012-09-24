@@ -12,4 +12,5 @@ run_list 'role[base]',
          'role[nginx]',
          'role[postfix]',
          'role[nodejs]',
+         'role[git]',
          'recipe[redtape_application]'

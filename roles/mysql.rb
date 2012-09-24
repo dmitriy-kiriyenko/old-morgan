@@ -8,4 +8,3 @@ default_attributes mysql: {
   }
 
 run_list 'recipe[mysql::client]', 'recipe[mysql::server]'
-node.set_unless['mysql']['application_password'] = secure_password

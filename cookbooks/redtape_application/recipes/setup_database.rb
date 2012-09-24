@@ -13,6 +13,6 @@ template '/etc/databases/redtape.yml' do
   mode '775'
   source 'database.yml.erb'
   variables(
-    node['redtape_application']['database']
+    node['redtape_application']['database'].merge password: node['mysql']['application_password']
   )
 end

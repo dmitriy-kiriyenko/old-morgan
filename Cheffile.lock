@@ -30,7 +30,7 @@ SITE
 GIT
   remote: git://github.com/dmitriy-kiriyenko/chef-unicorn.git
   ref: master
-  sha: 579d91fd0bab4edec80a135a0c9e312932917c8c
+  sha: 1e3d327122b37a27510167d4d83ad1027361cc92
   specs:
     unicorn (0.2.0)
 

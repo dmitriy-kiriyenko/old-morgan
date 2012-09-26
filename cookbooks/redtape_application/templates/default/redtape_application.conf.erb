@@ -38,7 +38,11 @@ server {
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-Proto https;
     proxy_redirect off;
-    proxy_pass http://redtape_server;
+
+    if (!-f $request_filename) {
+      proxy_pass http://redtape_server;
+      break;
+    }
   }
 
   if (-f $document_root/system/maintenance.html) {

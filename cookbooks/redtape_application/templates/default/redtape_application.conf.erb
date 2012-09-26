@@ -3,9 +3,29 @@ upstream redtape_server {
   server 127.0.0.1:8080 fail_timeout=0;
 }
 
+# Redirect all non-ssl connections to ssl.
 server {
-  listen 80 default;
-  server_name _;
+  listen       80;
+  server_name  _;
+  access_log   /dev/null;
+  error_log    /dev/null;
+  rewrite ^(.*) https://$host$1 permanent;
+}
+
+server {
+  listen               443 default ssl;
+  server_name          _;
+  ssl                  on;
+  ssl_certificate      <%= node['nginx']['dir'] %>/ssl/turbinehq.com.pem;
+  ssl_certificate_key  <%= node['nginx']['dir'] %>/ssl/turbinehq.com.key;
+  ssl_session_timeout  5m;
+  ssl_protocols        SSLv3 TLSv1;
+  ssl_ciphers          ALL:!aNULL:!ADH:!eNULL:!LOW:!MEDIUM:!EXP:RC4+RSA:+HIGH;
+  ssl_prefer_server_ciphers on;
+
+  # SSL Log
+  access_log <%= node['nginx']['log_dir'] %>/ssl-access.log;
+  error_log  <%= node['nginx']['log_dir'] %>/ssl-error.log;
 
   client_max_body_size 4G;
   keepalive_timeout 5;
@@ -15,6 +35,8 @@ server {
   location @app {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto https;
     proxy_redirect off;
     proxy_pass http://redtape_server;
   }

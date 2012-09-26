@@ -41,7 +41,16 @@ server {
     proxy_pass http://redtape_server;
   }
 
-  error_page 500 502 503 504 /500.html;
+  if (-f $document_root/system/maintenance.html) {
+    return 503;
+  }
+  error_page 503 @maintenance;
+  location @maintenance {
+    rewrite  ^(.*)$  /system/maintenance.html last;
+    break;
+  }
+
+  error_page 500 502 504 /500.html;
   location = /500.html {
     root /var/www/apps/redtape/current/public;
   }

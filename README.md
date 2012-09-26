@@ -1,44 +1,80 @@
 # Chef Repository for Turbine Application
 
-Boilerplate chef repository. It comes with bundled set of frequently used tools, skeleton roles and widely used cookbooks.
+A list of cookbooks and recipes to set the things up for [Turbine RoR
+application](https://github.com/mstibbe/Turbine-Application).
 
-## Setup
+## Setup for a new developer
 
-Fork this repository and name it appropriately (usually [project-name]-chef).
+Ok, so there is a new developer in a project and we need to set the
+things up. There are two things to be done:
 
-Install required gems:
+1. A new user should be added to all servers.
+2. A new chef-client should be created and configured.
 
-```bash
-bundle install --binstubs
+These two tasks fit good together when done on a new developer's
+machine.
+
+So,
+
+* Clone this repository:
+
+```console
+git clone git@github.com:mstibbe/Turbine-Chef.git
 ```
 
-## Bootstrapping the chef server
+* Install required gems:
 
-```bash
-./bin/knife bootstrap 192.168.33.11 --ssh-user vagrant --distro server_ubuntu_1_9_3 --node-name "chef.domain.com" --sudo
-
+```console
+bundle
 ```
 
-* `--distro` - bootstrap template (look for them in `.chef/bootstrap` folder)
-* `--node-name` - this parameter controls hostname of chef server. It's a good idea to set the hostname to be the same as domain.
+* Download and install vendor cookbooks:
 
-See [`knife bootstrap` manual](http://wiki.opscode.com/display/chef/Knife+Bootstrap)  for more information.
-
-## Creating the first client
-
-1. Navigate to http://192.168.33.11:4040, (It's better to reset credentials for webui, default are `admin/chefchef`)
-2. Create a client with the admin privileges
-3. Save private key to `.chef/client.pem` file
-4. Copy the validation key from server `/etc/chef/validation.pem` to your dev machine `.chef/validation.pem`
-5. Edit `.chef/knife.rb` file. Set server url and your client name.
-
-Test that everything is ok:
-
-```bash
-./bin/knife client list
+```console
+bundle exec librarian-chef install
 ```
 
-You should see clients list.
+* Navigate to our Chef Server Web UI: http://articulateexpress.com:4040.
+Login (as admin or somehow else). Existing developers should help you.
+* Go to clients and create a client with admin privileges
+* Copy private key to `.chef/client.pem`
+* Run `./bin/knife client list` from the repository root - you should see clients list
+* Copy `/etc/chef/validation.pem` and place it to `.chef/validation.pem`
+* Add your username and public key to `roles/base.rb`:
+
+```ruby
+admin_users: [
+  { ... }, # one user
+  { ... }, # another user
+  {
+    name: 'aratak',
+    ssh_key: 'ssh-rsa BLAHBLAHBLAH= aratak@anahoret.com'
+  }
+]
+```
+
+* Add your public key to deploy user in `roles/base.rb`:
+
+```ruby
+deploy_user: {
+  # name, group, etc...
+  ssh_key: "ssh-rsa BLAHBLAHBLAH= aratak@anahoret.com
+ssh-rsa BLAHBLAHBLAH2= dak@anahoret.com"
+}
+```
+
+* Try running chef-client. This will add the new developer to all
+  servers.
+
+```console
+rake deploy:all
+```
+
+* Explore contents of Rakefile to find out other deployment jobs.
+
+## Bootstrapping a new node (production or staging)
+
+TODO: this section pending.
 
 ## Cookbooks
 
@@ -47,13 +83,13 @@ You should see clients list.
 The project uses [`librarian-chef`](https://github.com/applicationsonline/librarian) to manage cookbooks. To install cookbooks run:
 
 ```bash
-./bin/librarian-chef install
+bundle exec librarian-chef install
 ```
 
 Upload cookbooks to chef server
 
 ```bash
-./bin/knife cookbook upload -a
+rake deploy:cookbooks
 ```
 
 *Hint: a good place to start searching for a cookbook is an official Opscode repository - [https://github.com/opscode-cookbooks](https://github.com/opscode-cookbooks)*
@@ -73,7 +109,7 @@ Roles are building blocks of your infrastructure. Try to keep them small, concis
 The easiest way to create a new role is to take any of the bundled roles and use the same structure. To upload role to chef server use the following command:
 
 ```bash
-./bin/knife role from file roles/[role_name].rb
+rake deploy:roles
 ```
 
 **Important note: - Every time you update your role you have to upload it to the server**
@@ -81,7 +117,7 @@ The easiest way to create a new role is to take any of the bundled roles and use
 ### Assigning a role to a node
 
 ```bash
-./bin/knife node run_list add nodename role[postfix]
+bundle exec knife node run_list add nodename role[postfix]
 ```
 
 ## Bootstrapping a new node
@@ -101,121 +137,16 @@ See [`knife bootstrap` manual](http://wiki.opscode.com/display/chef/Knife+Bootst
 If you're using the bundled `base` role there is a special user on your node `deploy` which is allowed to run `chef-client` with sudo privileges. To run `chef-client` on nodes you can run the following command:
 
 ```bash
-./bin/knife ssh "role:base" -x deploy "sudo chef-client"
-
+rake deploy:application
 ```
 
-There is a handy rake task `rake deploy` which uploads cookbooks, updates roles and runs `chef-client`
+## Bootstrapping the new chef server (to move it to a new machine)
 
-## Bundled roles
-
-There are several pre-bundled roles which you can use as a building blocks for a bigger roles. You should create roles with a meaningful names like 'appserver' or 'db-slave' it is better to avoid names like 'mysql' or 'postfix'.
-
-### base
-
-Base role is applied to all nodes. It enables firewall and sets up special deployment and administrator accounts for a node. It sets up ssh authorized keys.
-
-Deployment user is a low privileged user it can run only chef-client with sudo privileges.
-
-Administrator users are users who can do `sudo su -`. There are could be several such users.
-
-Here is quite self-descriptive sample attributes set for setting up deployment user and one admin user:
-
-```ruby
-maintenance: {
-  deploy_user: {
-    name: 'deploy',
-    group: 'deploy',
-    ssh_key: 'ssh-rsa AAndds...='
-  },
-  admin_users: [{
-    name: 'ia',
-    ssh_key: 'ssh-rsa KADSAW...='
-  }]
-}
+```console
+./bin/knife bootstrap 192.168.33.11 --ssh-user root --distro server_ubuntu_1_9_3 --node-name "chef.turbinehq.com" --sudo
 ```
 
-### chef-server
+* `--distro` - bootstrap template (look for them in `.chef/bootstrap` folder)
+* `--node-name` - this parameter controls hostname of chef server. It's a good idea to set the hostname to be the same as domain.
 
-Chef server role opens ports that are used for chef server (4000 & 4040). For a more rock-solid chef server setup it is better to put a proxy before (nginx or Apache).
-
-### postfix
-
-This role installs postfix package and does minimal require configuration. Pay attention to set the following attributes:
-
-```ruby
-postfix: {
-  mydomain: 'node-domain.com',
-  myorigin: 'node-domain.com'
-}
-```
-
-See [postfix cookbook description](https://github.com/opscode-cookbooks/postfix) for advanced setup & tuning.
-
-### postgresql-server
-
-Installs and sets up PostgreSQL server and client. See [PostgreSQL cookbook description](https://github.com/opscode-cookbooks/postgresql) for advanced setup & tuning.
-
-Hint: cookbook generates random password for `postgres` user. You can later retrieve it as a node attribute `node[:postgresql][:password][:postgres]`
-
-### nginx
-
-Installs nginx from Ubuntu repository. You can tune it to be built from sources. Also applying this role will open port 80.
-
-### nodejs
-
-Installs Node.js from deb package. Can be used to run node applications and as javascript environment for Rails Asset Pipeline. Package installed from Chris Lea's PPA.
-
-## Foodcritic
-
-[Foodcritic](http://acrmp.github.com/foodcritic/) is bundled with stacker and can be used for linting your cookbooks.
-
-```bash
-./bin/foodcritic cookbooks
-```
-It's a good practice to run it frequently and follow its suggestions.
-
-## Real world example
-
-Lets deploy a chef server and a rails application (as an example we will take [copycopter](https://github.com/copycopter/copycopter-server) by [thoughtbot](http://thoughtbot.com/)) to a server running Ubuntu 12.04. For example lets do it using small instance from Linode.
-
-* Deploy a new Linux distribution (Ubuntu 12.04 64bit)
-* Bootstrap chef-server
-
-```bash
-./bin/knife bootstrap 50.116.44.124 --ssh-user root --ssh-password yourpassword --distro server_ubuntu_1_9_3 --node-name "li483-124.members.linode.com"
-
-```
-
-* Navigate to http://li483-124.members.linode.com:4040. Default credentials are admin/chefchef. Change them after the first login.
-* Go to clients and create a client with admin privileges
-* Copy private key to `.chef/client.pem`
-* Edit `.chef/knife.rb` and set server url (with port) and your client name:
-
-```ruby
-chef_server_url 'http://li483-124.members.linode.com:4000' # chef server url
-node_name       'ia'                                       # your client name
-client_key      'client.pem'                               # your client key
-```
-
-* Run `./bin/knife client list` from the repository root - you should see clients list
-* Copy `/etc/chef/validation.pem` and place it to `.chef/validation.pem`
-* Edit `roles/_base.rb` to satisfy your needs. (Don't forget to put your public keys)
-* Upload cookbooks and roles to server
-
-```bash
-./bin/rake roles
-./bin/librarian-chef install
-./bin/knife cookbook upload -a
-```
-
-* Bootstrap the node. Usually it would be a separate server. But in this case we would bootstrap the same physical server.
-
-```bash
-./bin/knife bootstrap 50.116.44.124 --ssh-user root --ssh-password yourpassword --distro ubuntu12.04-gems -r 'role[copycopter]' --node-name "copycopter"
-
-```
-
-** Important: check that server hostname is the same as its domain **
-
-* Navigate to http://li483-124.members.linode.com - you should see copycopter welcome screen.
+See [`knife bootstrap` manual](http://wiki.opscode.com/display/chef/Knife+Bootstrap) for more information.

@@ -6,7 +6,7 @@ upstream redtape_server {
 # Redirect all non-ssl connections to ssl.
 server {
   listen       80;
-  server_name  _;
+  server_name  <%= node['nginx']['domain'] %>;
   access_log   /dev/null;
   error_log    /dev/null;
   rewrite ^(.*) https://$host$1 permanent;
@@ -14,10 +14,10 @@ server {
 
 server {
   listen               443 default ssl;
-  server_name          _;
+  server_name          <%= node['nginx']['domain'] %>;
   ssl                  on;
-  ssl_certificate      <%= node['nginx']['dir'] %>/ssl/turbinehq.com.pem;
-  ssl_certificate_key  <%= node['nginx']['dir'] %>/ssl/turbinehq.com.key;
+  ssl_certificate      <%= node['nginx']['crt_file'] %>;
+  ssl_certificate_key  <%= node['nginx']['key_file'] %>;
   ssl_session_timeout  5m;
   ssl_protocols        SSLv3 TLSv1;
   ssl_ciphers          ALL:!aNULL:!ADH:!eNULL:!LOW:!MEDIUM:!EXP:RC4+RSA:+HIGH;

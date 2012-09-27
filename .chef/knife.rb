@@ -1,6 +1,6 @@
 require 'librarian/chef/integration/knife'
 
-chef_server_url          'http://articulateexpress.com:4000/'    # chef server url
+chef_server_url          'http://chef.turbinehq.com:4000/'    # chef server url
 node_name                `whoami`.chomp                          # your client name
 client_key               'client.pem'                            # your client key
 

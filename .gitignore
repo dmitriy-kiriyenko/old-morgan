@@ -2,6 +2,7 @@
 bin/
 vendor/
 .chef/*.pem
+.chef/*.pem.old
 .chef/checksums
 .bundle/
 .vagrant

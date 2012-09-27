@@ -74,7 +74,31 @@ rake deploy:all
 
 ## Bootstrapping a new node (production or staging)
 
-TODO: this section pending.
+* Set a hostname on a new node server:
+
+```console
+sudo echo 'turbine.com' > /etc/hostname && hostname -F /etc/hostname
+```
+
+* Bootstrap a node
+
+```console
+knife bootstrap 50.116.44.124 --ssh-user root --distro ubuntu12.04-gems -r 'role[redtape_application]' --node-name "turbinehq.com"
+```
+
+For staging use role "redtape_staging".
+
+* Check ssl keys in `/etc/nginx/ssl`.
+
+* Deploy application (from application repository)
+
+```console
+cap deploy:setup
+cap deploy:migrations
+```
+
+* Upload database dump if needed.
+* Check that all works.
 
 ## Cookbooks
 

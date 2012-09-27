@@ -150,3 +150,27 @@ rake deploy:application
 * `--node-name` - this parameter controls hostname of chef server. It's a good idea to set the hostname to be the same as domain.
 
 See [`knife bootstrap` manual](http://wiki.opscode.com/display/chef/Knife+Bootstrap) for more information.
+
+* Set a user for you with admin priveleges. Copy client.pem and
+validation.pem. For reference, check appropriate points from
+instruction "Set a new developer".
+
+* Upload cookbooks and roles:
+
+```console
+rake deploy:roles deploy:cookbooks
+```
+
+* Move json attributes for node from old chef server to a new one.
+* On each node in `/etc/chef`: remove client.pem, enter a new address in client.rb and replace validation.pem with a server one.
+* Run chef-client on each node directly:
+
+```console
+sudo chef-client
+```
+
+* Check that all works:
+
+```console
+rake deploy:application
+```

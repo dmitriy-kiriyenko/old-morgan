@@ -179,6 +179,8 @@ See [`knife bootstrap` manual](http://wiki.opscode.com/display/chef/Knife+Bootst
 validation.pem. For reference, check appropriate points from
 instruction "Set a new developer".
 
+* Assign roles `base` and `chef_server` to chef server node.
+
 * Upload cookbooks and roles:
 
 ```console

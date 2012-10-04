@@ -1,12 +1,12 @@
-pid = "#{node['unicorn']['app_root']}/pids/unicorn.pid"
+app_root = '/var/www/apps/redtape/current'
 
 node['unicorn'] = {
   'installs'  => [ {
-    'app_root' => '/var/www/apps/redtape/current',
+    'app_root' => app_root,
     'run_service' => false,
     'user' => node['maintenance']['deploy_user']['name'],
     'group' => node['maintenance']['deploy_user']['group'],
-    'pid' => pid,
+    'pid' => "#{app_root}/pids/unicorn.pid",
     'config' => {
       'preload_app' => true,
       'before_fork' => <<-RUBY,

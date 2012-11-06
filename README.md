@@ -1,3 +1,5 @@
+# THIS REPOSITORY IS DEPRECATED AND NO LONGER MAINTAINED
+
 # Boilerplate chef repository
 
 ## Usage
